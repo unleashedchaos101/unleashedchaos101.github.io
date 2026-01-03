@@ -102,27 +102,52 @@
             border-style: dashed;
         }
 
-        /* --- Buttons --- */
-        .play-store-btn {
+        /* --- Aesthetic Play Store Button --- */
+        .store-btn {
             display: inline-flex;
             align-items: center;
-            background-color: #fff;
-            color: #000;
-            padding: 10px 16px;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05); /* Glass effect */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 10px 20px;
             text-decoration: none;
+            transition: all 0.3s ease;
+            min-width: 160px;
+            margin-top: auto; /* Ensures alignment at bottom */
+        }
+
+        .store-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .store-icon {
+            width: 28px;
+            height: 28px;
+            margin-right: 12px;
+        }
+
+        .store-text {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .store-text span.small {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
             font-weight: 600;
-            font-size: 0.9rem;
-            transition: opacity 0.2s;
         }
 
-        .play-store-btn img {
-            height: 18px;
-            margin-right: 8px;
-        }
-
-        .play-store-btn:hover {
-            opacity: 0.9;
+        .store-text span.large {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.1;
         }
 
         /* --- Footer & Contact --- */
@@ -176,9 +201,18 @@
             <img src="images/notch_touch_logo.jpg" alt="Notch Touch Logo" class="app-icon">
             <h3 class="app-title">Notch Touch</h3>
             <p class="app-desc">Transform your camera cutout into a shortcut button. Fully customizable gestures and privacy-focused.</p>
-            <a href="https://play.google.com/store/apps/details?id=com.chaos.notchtouch" class="play-store-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Play Store">
-                Get it on Google Play
+            
+            <a href="https://play.google.com/store/apps/details?id=com.chaos.notchtouch" class="store-btn" target="_blank">
+                <svg class="store-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                    <path fill="#4DB6AC" d="M7.4 4.6L7.4 43.4c0 .3.1.5.3.6l.1.1 21.4-21.3L7.7 4C7.5 4.1 7.4 4.3 7.4 4.6z"/>
+                    <path fill="#80CBC4" d="M36 29.8L29.2 22.9 9.1 43.3c.7.6 1.8.6 2.6.2l24.3-13.7z"/>
+                    <path fill="#26A69A" d="M36 18.2L11.7 4.5c-.8-.4-1.9-.4-2.6.2l20.1 20.4L36 18.2z"/>
+                    <path fill="#009688" d="M29.2 22.9L36 29.8c1.3-.7 1.3-1.9 0-2.6l-6.8-4.3z"/>
+                </svg>
+                <div class="store-text">
+                    <span class="small">GET IT ON</span>
+                    <span class="large">Google Play</span>
+                </div>
             </a>
         </div>
 
@@ -186,9 +220,18 @@
             <img src="images/transactr_logo.png" alt="Transactr Logo" class="app-icon">
             <h3 class="app-title">Transactr</h3>
             <p class="app-desc">The student-focused expense tracker. Simple logging, powerful analytics, and offline-first.</p>
-            <a href="https://play.google.com/store/apps/details?id=com.chaos.transactr" class="play-store-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Play Store">
-                Get it on Google Play
+            
+            <a href="https://play.google.com/store/apps/details?id=com.chaos.transactr" class="store-btn" target="_blank">
+                <svg class="store-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                    <path fill="#4DB6AC" d="M7.4 4.6L7.4 43.4c0 .3.1.5.3.6l.1.1 21.4-21.3L7.7 4C7.5 4.1 7.4 4.3 7.4 4.6z"/>
+                    <path fill="#80CBC4" d="M36 29.8L29.2 22.9 9.1 43.3c.7.6 1.8.6 2.6.2l24.3-13.7z"/>
+                    <path fill="#26A69A" d="M36 18.2L11.7 4.5c-.8-.4-1.9-.4-2.6.2l20.1 20.4L36 18.2z"/>
+                    <path fill="#009688" d="M29.2 22.9L36 29.8c1.3-.7 1.3-1.9 0-2.6l-6.8-4.3z"/>
+                </svg>
+                <div class="store-text">
+                    <span class="small">GET IT ON</span>
+                    <span class="large">Google Play</span>
+                </div>
             </a>
         </div>
 
@@ -196,9 +239,18 @@
             <img src="images/network_switch_logo.jpg" alt="Network Switch Logo" class="app-icon">
             <h3 class="app-title">5G-4G Notifier</h3>
             <p class="app-desc">Instant alerts when your network switches modes. Stay in control of your connectivity.</p>
-            <a href="LINK_TO_YOUR_5G_APP_PLAY_STORE_PAGE" class="play-store-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Play Store">
-                Get it on Google Play
+            
+            <a href="LINK_TO_YOUR_5G_APP_PLAY_STORE_PAGE" class="store-btn" target="_blank">
+                <svg class="store-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                    <path fill="#4DB6AC" d="M7.4 4.6L7.4 43.4c0 .3.1.5.3.6l.1.1 21.4-21.3L7.7 4C7.5 4.1 7.4 4.3 7.4 4.6z"/>
+                    <path fill="#80CBC4" d="M36 29.8L29.2 22.9 9.1 43.3c.7.6 1.8.6 2.6.2l24.3-13.7z"/>
+                    <path fill="#26A69A" d="M36 18.2L11.7 4.5c-.8-.4-1.9-.4-2.6.2l20.1 20.4L36 18.2z"/>
+                    <path fill="#009688" d="M29.2 22.9L36 29.8c1.3-.7 1.3-1.9 0-2.6l-6.8-4.3z"/>
+                </svg>
+                <div class="store-text">
+                    <span class="small">GET IT ON</span>
+                    <span class="large">Google Play</span>
+                </div>
             </a>
         </div>
 
