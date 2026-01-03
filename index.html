@@ -1,10 +1,224 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Notch-Touch App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChaosDevs | Android Utilities</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f1115; /* Deep dark background */
+            --card-bg: #1a1d24;
+            --accent-color: #7c3aed; /* Chaos Purple */
+            --text-main: #ffffff;
+            --text-secondary: #a1a1aa;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- Header Section --- */
+        header {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: var(--text-secondary);
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* --- Apps Grid --- */
+        .container {
+            max-width: 1000px;
+            width: 90%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding-bottom: 60px;
+        }
+
+        .app-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+
+        .app-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 14px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            background-color: #333; /* Fallback if image fails */
+        }
+
+        .app-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+        }
+
+        .app-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0 0 20px 0;
+            line-height: 1.5;
+            flex-grow: 1; /* Pushes button to bottom */
+        }
+
+        .coming-soon {
+            opacity: 0.6;
+            border-style: dashed;
+        }
+
+        /* --- Buttons --- */
+        .play-store-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: #fff;
+            color: #000;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        .play-store-btn img {
+            height: 18px;
+            margin-right: 8px;
+        }
+
+        .play-store-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* --- Footer & Contact --- */
+        footer {
+            margin-top: auto;
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            width: 100%;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        }
+
+        .contact-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin: 0 10px;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-  <h1>Notch-Touch App Support</h1>
-  <p>Developer contact and support page.</p>
+
+    <header>
+        <h1>ChaosDevs</h1>
+        <p class="subtitle">Utility Apps for Power Users</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="app-card">
+            <img src="images/notch_touch_logo.png" alt="Notch Touch Logo" class="app-icon">
+            <h3 class="app-title">Notch Touch</h3>
+            <p class="app-desc">Transform your camera cutout into a shortcut button. Fully customizable gestures and privacy-focused.</p>
+            <a href="LINK_TO_YOUR_NOTCH_TOUCH_PLAY_STORE_PAGE" class="play-store-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Play Store">
+                Get it on Google Play
+            </a>
+        </div>
+
+        <div class="app-card">
+            <img src="images/transactr_logo.png" alt="Transactr Logo" class="app-icon">
+            <h3 class="app-title">Transactr</h3>
+            <p class="app-desc">The student-focused expense tracker. Simple logging, powerful analytics, and offline-first.</p>
+            <a href="LINK_TO_YOUR_TRANSACTR_PLAY_STORE_PAGE" class="play-store-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Play Store">
+                Get it on Google Play
+            </a>
+        </div>
+
+        <div class="app-card">
+            <img src="images/network_switch_logo.png" alt="Network Switch Logo" class="app-icon">
+            <h3 class="app-title">5G-4G Notifier</h3>
+            <p class="app-desc">Instant alerts when your network switches modes. Stay in control of your connectivity.</p>
+            <a href="LINK_TO_YOUR_5G_APP_PLAY_STORE_PAGE" class="play-store-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Play Store">
+                Get it on Google Play
+            </a>
+        </div>
+
+        <div class="app-card coming-soon">
+            <div class="app-icon" style="background: #2a2a2a; display: flex; align-items: center; justify-content: center;">🚀</div>
+            <h3 class="app-title">Coming Soon</h3>
+            <p class="app-desc">We are building the next big thing. Stay tuned for updates.</p>
+        </div>
+
+    </div>
+
+    <footer>
+        <a href="mailto:your-email@gmail.com" class="contact-btn">Contact Support</a>
+        
+        <div class="footer-links">
+            <a href="app-ads.txt" target="_blank">View app-ads.txt</a>
+            <a href="#">Privacy Policy</a>
+            <span>&copy; 2026 ChaosDevs</span>
+        </div>
+    </footer>
+
 </body>
 </html>
