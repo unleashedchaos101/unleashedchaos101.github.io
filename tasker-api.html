@@ -42,10 +42,51 @@
 
         .container {
             max-width: 800px; width: 90%;
-            display: flex; flex-direction: column; gap: 30px;
+            display: flex; flex-direction: column; gap: 20px;
             padding-bottom: 80px;
         }
 
+        /* --- Tabs UI --- */
+        .tab-nav {
+            display: flex;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 100px;
+            padding: 5px;
+            margin-bottom: 10px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover { color: var(--text-main); }
+
+        .tab-btn.active {
+            background: var(--card-bg);
+            color: var(--text-main);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Cards & Content --- */
         .api-card {
             background-color: var(--card-bg);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
@@ -55,15 +96,27 @@
         }
 
         .api-card h2 { margin-top: 0; color: #fff; border-bottom: 1px solid var(--card-border); padding-bottom: 15px; }
-        .api-card p { color: var(--text-secondary); line-height: 1.6; }
+        .api-card p.desc { color: var(--text-secondary); line-height: 1.6; font-size: 1.05rem; }
 
+        /* --- Scenario Box --- */
+        .scenario-box {
+            background: rgba(139, 92, 246, 0.05);
+            border-left: 3px solid var(--accent-color);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 12px 12px 0;
+        }
+        
+        .scenario-box h4 { margin: 0 0 8px 0; color: #d8b4fe; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;}
+        .scenario-box p { margin: 0; color: #e2e8f0; font-size: 0.95rem; line-height: 1.5;}
+
+        /* --- Code Block --- */
         .code-block {
             background-color: var(--code-bg);
             border-radius: 12px; padding: 20px;
             font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
             color: #e2e8f0; overflow-x: auto;
             border: 1px solid rgba(255,255,255,0.05);
-            margin-top: 15px;
         }
 
         .code-row { display: flex; margin-bottom: 8px; }
@@ -72,7 +125,7 @@
         .code-comment { color: #64748b; font-size: 0.85rem; margin-bottom: 15px; display: block;}
 
         .back-btn {
-            display: inline-block; margin-top: 20px;
+            display: inline-block; margin-top: 20px; text-align: center;
             color: var(--accent-color); text-decoration: none; font-weight: 600;
         }
         .back-btn:hover { text-decoration: underline; }
@@ -84,51 +137,95 @@
 
     <header>
         <h1>Notch-Touch x Tasker</h1>
-        <p class="subtitle">Official API Documentation for Inter-Process Communication (IPC)</p>
+        <p class="subtitle">Official API Documentation for Inter-Process Communication</p>
     </header>
 
     <div class="container">
-        <div class="api-card">
-            <h2>From Notch-Touch to Tasker</h2>
-            <p>Trigger a complex Tasker sequence simply by tapping your camera cutout.</p>
-            <div class="code-block">
-                <span class="code-comment">1. In Tasker: Preferences > Misc > Enable 'Allow External Access'</span>
-                <span class="code-comment">2. In Tasker: Create a named Task (e.g., 'TurnOffLights')</span>
-                <span class="code-comment">3. In Notch-Touch: Select '❖ RUN TASKER' and enter the exact Task Name.</span>
+        
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('trigger')">Trigger Tasker</button>
+            <button class="tab-btn" onclick="switchTab('killswitch')">The Kill-Switch</button>
+            <button class="tab-btn" onclick="switchTab('remap')">Dynamic Remap</button>
+        </div>
+
+        <div id="trigger" class="tab-content active">
+            <div class="api-card">
+                <h2>From Notch-Touch to Tasker</h2>
+                <p class="desc">Trigger a complex Tasker sequence simply by tapping your camera cutout.</p>
+                
+                <div class="scenario-box">
+                    <h4>Scenario: The Smart Home Macro</h4>
+                    <p>You want to tap your notch when leaving the house to trigger a "Lockdown" routine that turns off all your Philips Hue lights, locks the smart door, and sets your phone to vibrate.</p>
+                </div>
+
+                <div class="code-block">
+                    <span class="code-comment">1. In Tasker: Preferences > Misc > Enable 'Allow External Access'</span>
+                    <span class="code-comment">2. In Tasker: Create a named Task (e.g., 'HouseLockdown')</span>
+                    <span class="code-comment">3. In Notch-Touch: Select '❖ RUN TASKER' on a gesture and enter the exact Task Name.</span>
+                </div>
             </div>
         </div>
 
-        <div class="api-card">
-            <h2>From Tasker to Notch-Touch (Kill-Switch)</h2>
-            <p>Dynamically disable or enable specific notch gestures. Perfect for gaming or fullscreen media.</p>
-            <div class="code-block">
-                <span class="code-comment">In Tasker, create a 'Send Intent' Action:</span>
-                <div class="code-row"><span class="code-key">Action:</span><span class="code-val">com.chaos.notchtouch.SET_GESTURE_STATE</span></div>
-                <div class="code-row"><span class="code-key">Extra 1:</span><span class="code-val">gesture_key:single</span></div>
-                <div class="code-row"><span class="code-key">Extra 2:</span><span class="code-val">is_disabled:true</span></div>
-                <div class="code-row"><span class="code-key">Target:</span><span class="code-val">Broadcast Receiver</span></div>
-                <br>
-                <span class="code-comment">Keys: single, double, triple, left, right, left_hold, right_hold, hold</span>
-                <span class="code-comment">is_disabled: Use 'true' to block the touch, 'false' to re-enable.</span>
+        <div id="killswitch" class="tab-content">
+            <div class="api-card">
+                <h2>Tasker to Notch-Touch (Kill-Switch)</h2>
+                <p class="desc">Dynamically disable or enable specific notch gestures in the background.</p>
+                
+                <div class="scenario-box">
+                    <h4>Scenario: The Gaming Mode</h4>
+                    <p>You play PUBG Mobile and keep accidentally swiping the notch while aiming. You can set Tasker to automatically send the 'disable' intent when the game launches, and send the 'enable' intent when you close it.</p>
+                </div>
+
+                <div class="code-block">
+                    <span class="code-comment">In Tasker, create a 'Send Intent' Action:</span>
+                    <div class="code-row"><span class="code-key">Action:</span><span class="code-val">com.chaos.notchtouch.SET_GESTURE_STATE</span></div>
+                    <div class="code-row"><span class="code-key">Extra 1:</span><span class="code-val">gesture_key:single</span></div>
+                    <div class="code-row"><span class="code-key">Extra 2:</span><span class="code-val">is_disabled:true</span></div>
+                    <div class="code-row"><span class="code-key">Target:</span><span class="code-val">Broadcast Receiver</span></div>
+                    <br>
+                    <span class="code-comment">Keys: single, double, triple, left, right, left_hold, right_hold, hold</span>
+                    <span class="code-comment">is_disabled: Use 'true' to block the touch, 'false' to re-enable.</span>
+                </div>
             </div>
         </div>
 
-        <div class="api-card">
-            <h2>From Tasker to Notch-Touch (Remapping)</h2>
-            <p>Instantly overwrite a gesture's action without opening the Notch-Touch app.</p>
-            <div class="code-block">
-                <span class="code-comment">In Tasker, create a 'Send Intent' Action:</span>
-                <div class="code-row"><span class="code-key">Action:</span><span class="code-val">com.chaos.notchtouch.SET_GESTURE_ACTION</span></div>
-                <div class="code-row"><span class="code-key">Extra 1:</span><span class="code-val">gesture_key:double</span></div>
-                <div class="code-row"><span class="code-key">Extra 2:</span><span class="code-val">action_name:ACTION_OPEN_CAMERA</span></div>
-                <div class="code-row"><span class="code-key">Target:</span><span class="code-val">Broadcast Receiver</span></div>
-                <br>
-                <span class="code-comment">Ensure 'action_name' strictly matches the internal enum.</span>
+        <div id="remap" class="tab-content">
+            <div class="api-card">
+                <h2>Tasker to Notch-Touch (Remapping)</h2>
+                <p class="desc">Instantly overwrite a gesture's assigned action without ever opening the Notch-Touch app.</p>
+                
+                <div class="scenario-box">
+                    <h4>Scenario: Time-Based Context</h4>
+                    <p>You want your "Double Tap" gesture to open the Camera app during the day, but you want it to toggle the Flashlight after 8:00 PM. Tasker can send an intent at 8:00 PM to seamlessly reprogram the gesture's memory.</p>
+                </div>
+
+                <div class="code-block">
+                    <span class="code-comment">In Tasker, create a 'Send Intent' Action:</span>
+                    <div class="code-row"><span class="code-key">Action:</span><span class="code-val">com.chaos.notchtouch.SET_GESTURE_ACTION</span></div>
+                    <div class="code-row"><span class="code-key">Extra 1:</span><span class="code-val">gesture_key:double</span></div>
+                    <div class="code-row"><span class="code-key">Extra 2:</span><span class="code-val">action_name:ACTION_OPEN_CAMERA</span></div>
+                    <div class="code-row"><span class="code-key">Target:</span><span class="code-val">Broadcast Receiver</span></div>
+                    <br>
+                    <span class="code-comment">Ensure 'action_name' strictly matches the internal Android enum.</span>
+                </div>
             </div>
         </div>
 
         <a href="index.html" class="back-btn">← Back to Chæos Studios</a>
     </div>
 
+    <script>
+        function switchTab(tabId) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            // Remove active class from all contents
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked button
+            event.currentTarget.classList.add('active');
+            // Add active class to corresponding content
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
 </body>
 </html>
