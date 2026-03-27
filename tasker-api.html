@@ -129,6 +129,7 @@
             background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px;
             color: #a8b1ff;
         }
+        .warning-text { color: #f59e0b; font-size: 0.8rem; display: block; margin-top: 4px;}
 
         .back-btn {
             display: inline-block; margin-top: 20px; text-align: center;
@@ -234,15 +235,26 @@
                         </thead>
                         <tbody>
                             <tr><td><code>ACTION_NONE</code></td><td>Does nothing (Clears the gesture)</td></tr>
-                            <tr><td><code>ACTION_OPEN_NOTCH_MENU</code></td><td>Opens your configured Notch Menu</td></tr>
+                            <tr><td><code>ACTION_OPEN_APP</code></td><td>Opens a specific App <span class="warning-text">*Must be pre-configured in Notch-Touch</span></td></tr>
+                            <tr><td><code>ACTION_RUN_TASKER</code></td><td>Runs a Tasker Sequence <span class="warning-text">*Must be pre-configured in Notch-Touch</span></td></tr>
+                            <tr><td><code>ACTION_OPEN_CAMERA</code></td><td>Opens the Camera</td></tr>
+                            <tr><td><code>ACTION_SCREENSHOT</code></td><td>Takes a screenshot</td></tr>
+                            <tr><td><code>ACTION_OPEN_NOTCH_MENU</code></td><td>Opens the Notch Menu</td></tr>
                             <tr><td><code>ACTION_OPEN_WIDGETS</code></td><td>Opens the Widget Hub</td></tr>
-                            <tr><td><code>ACTION_TOGGLE_FLASHLIGHT</code></td><td>Turns Flashlight on/off</td></tr>
-                            <tr><td><code>ACTION_TOGGLE_RINGER</code></td><td>Cycles through Silent/Vibrate/Ring</td></tr>
-                            <tr><td><code>ACTION_TAKE_SCREENSHOT</code></td><td>Captures the screen</td></tr>
-                            <tr><td><code>ACTION_VOLUME_UP</code></td><td>Increases media volume</td></tr>
-                            <tr><td><code>ACTION_VOLUME_DOWN</code></td><td>Decreases media volume</td></tr>
+                            <tr><td><code>ACTION_BACK</code></td><td>Simulates the Back button</td></tr>
+                            <tr><td><code>ACTION_HOME</code></td><td>Simulates the Home button</td></tr>
+                            <tr><td><code>ACTION_RECENTS</code></td><td>Opens Recent Apps</td></tr>
+                            <tr><td><code>ACTION_NEXT_TRACK</code></td><td>Skips to the next song</td></tr>
+                            <tr><td><code>ACTION_PREVIOUS_TRACK</code></td><td>Returns to the previous song</td></tr>
+                            <tr><td><code>ACTION_PLAY_PAUSE</code></td><td>Toggles media Play/Pause</td></tr>
+                            <tr><td><code>ACTION_VOLUME_UP</code></td><td>Increases volume</td></tr>
+                            <tr><td><code>ACTION_VOLUME_DOWN</code></td><td>Decreases volume</td></tr>
                             <tr><td><code>ACTION_BRIGHTNESS_UP</code></td><td>Increases screen brightness</td></tr>
                             <tr><td><code>ACTION_BRIGHTNESS_DOWN</code></td><td>Decreases screen brightness</td></tr>
+                            <tr><td><code>ACTION_TOGGLE_FLASHLIGHT</code></td><td>Toggles the flashlight</td></tr>
+                            <tr><td><code>ACTION_LOCK_SCREEN</code></td><td>Locks the phone screen</td></tr>
+                            <tr><td><code>ACTION_LAUNCH_ASSISTANT</code></td><td>Launches the digital assistant</td></tr>
+                            <tr><td><code>ACTION_TOGGLE_RINGER</code></td><td>Toggles Silent/Ringer mode</td></tr>
                         </tbody>
                     </table>
                 </div>
