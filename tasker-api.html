@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasker API | Notch-Touch</title>
+    <title>Tasker Integration | Notch-Touch</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -46,30 +46,31 @@
             padding-bottom: 80px;
         }
 
-        /* --- Tabs UI --- */
+        /* --- Tabs UI (Mobile Fixed) --- */
         .tab-nav {
             display: flex;
+            flex-wrap: wrap; /* Allows tabs to wrap on small phone screens */
+            gap: 5px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--card-border);
-            border-radius: 100px;
+            border-radius: 16px;
             padding: 5px;
             margin-bottom: 10px;
-            overflow-x: auto;
         }
 
         .tab-btn {
-            flex: 1;
+            flex: 1 1 auto; /* Allows buttons to grow and shrink properly */
+            text-align: center;
             background: transparent;
             border: none;
             color: var(--text-secondary);
-            padding: 12px 20px;
+            padding: 12px 15px;
             font-size: 0.95rem;
             font-weight: 600;
             font-family: 'Inter', sans-serif;
-            border-radius: 100px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            white-space: nowrap;
         }
 
         .tab-btn:hover { color: var(--text-main); }
@@ -131,13 +132,18 @@
         .back-btn:hover { text-decoration: underline; }
 
         @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        
+        @media (max-width: 600px) {
+            .api-card { padding: 20px; }
+            .code-block { font-size: 0.8rem; }
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Notch-Touch x Tasker</h1>
-        <p class="subtitle">Official API Documentation for Inter-Process Communication</p>
+        <h1>Tasker Integration</h1>
+        <p class="subtitle">A simple guide to connecting Notch-Touch with Tasker.</p>
     </header>
 
     <div class="container">
@@ -155,7 +161,7 @@
                 
                 <div class="scenario-box">
                     <h4>Scenario: The Smart Home Macro</h4>
-                    <p>You want to tap your notch when leaving the house to trigger a "Lockdown" routine that turns off all your Philips Hue lights, locks the smart door, and sets your phone to vibrate.</p>
+                    <p>You want to tap your notch when leaving the house to trigger a "Lockdown" routine that turns off all your smart lights, locks the front door, and sets your phone to vibrate.</p>
                 </div>
 
                 <div class="code-block">
@@ -172,8 +178,8 @@
                 <p class="desc">Dynamically disable or enable specific notch gestures in the background.</p>
                 
                 <div class="scenario-box">
-                    <h4>Scenario: The Gaming Mode</h4>
-                    <p>You play PUBG Mobile and keep accidentally swiping the notch while aiming. You can set Tasker to automatically send the 'disable' intent when the game launches, and send the 'enable' intent when you close it.</p>
+                    <h4>Scenario: Reading & Scrolling Mode</h4>
+                    <p>You are reading a book on the Kindle app or scrolling through Instagram, and you don't want an accidental tap on the notch to interrupt you. Tasker can automatically send a 'disable' intent when those specific apps launch, and re-enable them when you leave the app.</p>
                 </div>
 
                 <div class="code-block">
@@ -216,14 +222,10 @@
 
     <script>
         function switchTab(tabId) {
-            // Remove active class from all buttons
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            // Remove active class from all contents
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             
-            // Add active class to clicked button
             event.currentTarget.classList.add('active');
-            // Add active class to corresponding content
             document.getElementById(tabId).classList.add('active');
         }
     </script>
