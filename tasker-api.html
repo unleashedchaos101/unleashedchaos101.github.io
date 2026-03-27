@@ -46,38 +46,25 @@
             padding-bottom: 80px;
         }
 
-        /* --- Tabs UI (Mobile Fixed) --- */
+        /* --- Tabs UI --- */
         .tab-nav {
-            display: flex;
-            flex-wrap: wrap; /* Allows tabs to wrap on small phone screens */
-            gap: 5px;
+            display: flex; flex-wrap: wrap; gap: 5px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 5px;
-            margin-bottom: 10px;
+            border-radius: 16px; padding: 5px; margin-bottom: 10px;
         }
 
         .tab-btn {
-            flex: 1 1 auto; /* Allows buttons to grow and shrink properly */
-            text-align: center;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            padding: 12px 15px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            flex: 1 1 auto; text-align: center; background: transparent;
+            border: none; color: var(--text-secondary);
+            padding: 12px 15px; font-size: 0.95rem; font-weight: 600;
+            font-family: 'Inter', sans-serif; border-radius: 12px;
+            cursor: pointer; transition: all 0.3s ease;
         }
 
         .tab-btn:hover { color: var(--text-main); }
-
         .tab-btn.active {
-            background: var(--card-bg);
-            color: var(--text-main);
+            background: var(--card-bg); color: var(--text-main);
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             border: 1px solid rgba(255,255,255,0.1);
         }
@@ -92,20 +79,23 @@
             background-color: var(--card-bg);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border-radius: 20px; padding: 30px;
-            border: 1px solid var(--card-border);
-            position: relative;
+            border: 1px solid var(--card-border); position: relative;
         }
 
         .api-card h2 { margin-top: 0; color: #fff; border-bottom: 1px solid var(--card-border); padding-bottom: 15px; }
         .api-card p.desc { color: var(--text-secondary); line-height: 1.6; font-size: 1.05rem; }
 
+        .guide-header {
+            margin-top: 30px; margin-bottom: 15px;
+            font-size: 1.1rem; color: #fff; font-weight: 600;
+            display: flex; align-items: center; gap: 8px;
+        }
+
         /* --- Scenario Box --- */
         .scenario-box {
             background: rgba(139, 92, 246, 0.05);
             border-left: 3px solid var(--accent-color);
-            padding: 15px 20px;
-            margin: 20px 0;
-            border-radius: 0 12px 12px 0;
+            padding: 15px 20px; margin: 20px 0; border-radius: 0 12px 12px 0;
         }
         
         .scenario-box h4 { margin: 0 0 8px 0; color: #d8b4fe; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;}
@@ -125,17 +115,32 @@
         .code-val { color: #d1d5db; }
         .code-comment { color: #64748b; font-size: 0.85rem; margin-bottom: 15px; display: block;}
 
+        /* --- Action Dictionary Table --- */
+        .action-dictionary {
+            width: 100%; border-collapse: collapse; margin-top: 15px;
+            font-size: 0.9rem; text-align: left;
+        }
+        .action-dictionary th, .action-dictionary td {
+            padding: 12px; border-bottom: 1px solid var(--card-border);
+        }
+        .action-dictionary th { color: var(--text-secondary); font-weight: 600; }
+        .action-dictionary td code {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px;
+            color: #a8b1ff;
+        }
+
         .back-btn {
             display: inline-block; margin-top: 20px; text-align: center;
             color: var(--accent-color); text-decoration: none; font-weight: 600;
         }
         .back-btn:hover { text-decoration: underline; }
 
-        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        
         @media (max-width: 600px) {
             .api-card { padding: 20px; }
             .code-block { font-size: 0.8rem; }
+            .action-dictionary { font-size: 0.8rem; }
+            .action-dictionary td code { font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -164,6 +169,7 @@
                     <p>You want to tap your notch when leaving the house to trigger a "Lockdown" routine that turns off all your smart lights, locks the front door, and sets your phone to vibrate.</p>
                 </div>
 
+                <div class="guide-header">🛠️ How to Configure</div>
                 <div class="code-block">
                     <span class="code-comment">1. In Tasker: Preferences > Misc > Enable 'Allow External Access'</span>
                     <span class="code-comment">2. In Tasker: Create a named Task (e.g., 'HouseLockdown')</span>
@@ -182,6 +188,7 @@
                     <p>You are reading a book on the Kindle app or scrolling through Instagram, and you don't want an accidental tap on the notch to interrupt you. Tasker can automatically send a 'disable' intent when those specific apps launch, and re-enable them when you leave the app.</p>
                 </div>
 
+                <div class="guide-header">🛠️ How to Configure</div>
                 <div class="code-block">
                     <span class="code-comment">In Tasker, create a 'Send Intent' Action:</span>
                     <div class="code-row"><span class="code-key">Action:</span><span class="code-val">com.chaos.notchtouch.SET_GESTURE_STATE</span></div>
@@ -189,7 +196,7 @@
                     <div class="code-row"><span class="code-key">Extra 2:</span><span class="code-val">is_disabled:true</span></div>
                     <div class="code-row"><span class="code-key">Target:</span><span class="code-val">Broadcast Receiver</span></div>
                     <br>
-                    <span class="code-comment">Keys: single, double, triple, left, right, left_hold, right_hold, hold</span>
+                    <span class="code-comment">Gesture Keys: single, double, triple, left, right, left_hold, right_hold, hold</span>
                     <span class="code-comment">is_disabled: Use 'true' to block the touch, 'false' to re-enable.</span>
                 </div>
             </div>
@@ -205,14 +212,39 @@
                     <p>You want your "Double Tap" gesture to open the Camera app during the day, but you want it to toggle the Flashlight after 8:00 PM. Tasker can send an intent at 8:00 PM to seamlessly reprogram the gesture's memory.</p>
                 </div>
 
+                <div class="guide-header">🛠️ How to Configure</div>
                 <div class="code-block">
                     <span class="code-comment">In Tasker, create a 'Send Intent' Action:</span>
                     <div class="code-row"><span class="code-key">Action:</span><span class="code-val">com.chaos.notchtouch.SET_GESTURE_ACTION</span></div>
                     <div class="code-row"><span class="code-key">Extra 1:</span><span class="code-val">gesture_key:double</span></div>
-                    <div class="code-row"><span class="code-key">Extra 2:</span><span class="code-val">action_name:ACTION_OPEN_CAMERA</span></div>
+                    <div class="code-row"><span class="code-key">Extra 2:</span><span class="code-val">action_name:ACTION_TOGGLE_FLASHLIGHT</span></div>
                     <div class="code-row"><span class="code-key">Target:</span><span class="code-val">Broadcast Receiver</span></div>
-                    <br>
-                    <span class="code-comment">Ensure 'action_name' strictly matches the internal Android enum.</span>
+                </div>
+
+                <div class="guide-header">📋 Action Reference Dictionary</div>
+                <p class="desc" style="font-size: 0.9rem; margin-top: 0;">Use these exact strings for the <code>action_name</code> Extra.</p>
+                
+                <div style="overflow-x: auto;">
+                    <table class="action-dictionary">
+                        <thead>
+                            <tr>
+                                <th>Action String (action_name)</th>
+                                <th>What it does</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>ACTION_NONE</code></td><td>Does nothing (Clears the gesture)</td></tr>
+                            <tr><td><code>ACTION_OPEN_NOTCH_MENU</code></td><td>Opens your configured Notch Menu</td></tr>
+                            <tr><td><code>ACTION_OPEN_WIDGETS</code></td><td>Opens the Widget Hub</td></tr>
+                            <tr><td><code>ACTION_TOGGLE_FLASHLIGHT</code></td><td>Turns Flashlight on/off</td></tr>
+                            <tr><td><code>ACTION_TOGGLE_RINGER</code></td><td>Cycles through Silent/Vibrate/Ring</td></tr>
+                            <tr><td><code>ACTION_TAKE_SCREENSHOT</code></td><td>Captures the screen</td></tr>
+                            <tr><td><code>ACTION_VOLUME_UP</code></td><td>Increases media volume</td></tr>
+                            <tr><td><code>ACTION_VOLUME_DOWN</code></td><td>Decreases media volume</td></tr>
+                            <tr><td><code>ACTION_BRIGHTNESS_UP</code></td><td>Increases screen brightness</td></tr>
+                            <tr><td><code>ACTION_BRIGHTNESS_DOWN</code></td><td>Decreases screen brightness</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
