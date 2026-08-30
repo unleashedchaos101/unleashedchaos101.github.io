@@ -3,275 +3,481 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasker Integration | Notch-Touch</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>Automation API (Tasker & MacroDroid) | Notch Touch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #090a0f; 
-            --card-bg: rgba(26, 29, 36, 0.6);
+            --card-bg: rgba(22, 26, 35, 0.75);
             --card-border: rgba(255, 255, 255, 0.08);
             --accent-color: #8b5cf6; 
-            --accent-glow: rgba(139, 92, 246, 0.4);
-            --code-bg: #1e1e24;
-            --text-main: #ffffff;
+            --accent-glow: rgba(139, 92, 246, 0.25);
+            --code-bg: #11141c;
+            --text-main: #f8fafc;
             --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --tag-tasker: #ff9800;
+            --tag-macrodroid: #00bcd4;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             margin: 0; padding: 0;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg-color);
-            background-image: radial-gradient(circle at top center, #1f1433 0%, #090a0f 100%);
+            background-image: radial-gradient(circle at 50% 0%, #1f1438 0%, #090a0f 70%);
             background-attachment: fixed;
             color: var(--text-main);
             display: flex; flex-direction: column; align-items: center;
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
 
-        header { text-align: center; padding: 60px 20px 30px; }
+        header { text-align: center; padding: 60px 20px 28px; }
         
+        .badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 999px;
+            background: rgba(139, 92, 246, 0.15);
+            color: #c4b5fd;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            margin-bottom: 14px;
+        }
+
         h1 {
-            font-size: 2.5rem; font-weight: 800; margin: 0; letter-spacing: -1px;
-            background: linear-gradient(270deg, #ffffff, #a8b1ff, #d8b4fe, #ffffff);
-            background-size: 300% 300%;
+            font-size: 2.4rem; font-weight: 800; margin: 0; letter-spacing: -0.03em;
+            background: linear-gradient(135deg, #ffffff 30%, #c4b5fd 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: gradientShift 8s ease infinite;
         }
         
-        p.subtitle { color: var(--text-secondary); margin-top: 10px; font-size: 1.1rem; }
+        p.subtitle { 
+            color: var(--text-secondary); 
+            margin-top: 10px; 
+            font-size: 1.05rem; 
+            max-width: 580px; 
+            line-height: 1.5; 
+        }
 
         .container {
-            max-width: 800px; width: 90%;
+            max-width: 820px; width: 92%;
             display: flex; flex-direction: column; gap: 20px;
             padding-bottom: 80px;
         }
 
-        /* --- Tabs UI --- */
+        /* --- Main Navigation Tabs --- */
         .tab-nav {
-            display: flex; flex-wrap: wrap; gap: 5px;
+            display: flex; gap: 6px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--card-border);
-            border-radius: 16px; padding: 5px; margin-bottom: 10px;
+            border-radius: 14px; padding: 4px;
         }
 
         .tab-btn {
-            flex: 1 1 auto; text-align: center; background: transparent;
+            flex: 1; text-align: center; background: transparent;
             border: none; color: var(--text-secondary);
-            padding: 12px 15px; font-size: 0.95rem; font-weight: 600;
-            font-family: 'Inter', sans-serif; border-radius: 12px;
-            cursor: pointer; transition: all 0.3s ease;
+            padding: 10px 14px; font-size: 0.9rem; font-weight: 600;
+            font-family: inherit; border-radius: 10px;
+            cursor: pointer; transition: all 0.2s ease;
         }
 
         .tab-btn:hover { color: var(--text-main); }
         .tab-btn.active {
-            background: var(--card-bg); color: var(--text-main);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
-        .tab-content { display: none; animation: fadeIn 0.4s ease; }
-        .tab-content.active { display: block; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.25s ease-out; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- Cards & Content --- */
         .api-card {
             background-color: var(--card-bg);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border-radius: 20px; padding: 30px;
-            border: 1px solid var(--card-border); position: relative;
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-radius: 18px; padding: 28px;
+            border: 1px solid var(--card-border);
         }
 
-        .api-card h2 { margin-top: 0; color: #fff; border-bottom: 1px solid var(--card-border); padding-bottom: 15px; }
-        .api-card p.desc { color: var(--text-secondary); line-height: 1.6; font-size: 1.05rem; }
+        .api-card h2 { 
+            margin: 0 0 8px 0; 
+            font-size: 1.4rem; 
+            font-weight: 700;
+            color: #fff; 
+            letter-spacing: -0.02em;
+        }
+        
+        .api-card p.desc { color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem; margin-top: 0; }
+
+        /* --- Sub-tabs for Tasker vs MacroDroid --- */
+        .sub-nav {
+            display: inline-flex; gap: 4px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px; padding: 3px;
+            margin-bottom: 12px;
+        }
+
+        .sub-btn {
+            background: transparent; border: none;
+            color: var(--text-muted); font-size: 0.8rem; font-weight: 600;
+            padding: 6px 12px; border-radius: 6px; cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .sub-btn.active {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .sub-content { display: none; }
+        .sub-content.active { display: block; }
 
         .guide-header {
-            margin-top: 30px; margin-bottom: 15px;
-            font-size: 1.1rem; color: #fff; font-weight: 600;
-            display: flex; align-items: center; gap: 8px;
+            margin-top: 24px; margin-bottom: 12px;
+            font-size: 0.95rem; color: #e2e8f0; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            display: flex; align-items: center; justify-content: space-between;
         }
 
         /* --- Scenario Box --- */
         .scenario-box {
-            background: rgba(139, 92, 246, 0.05);
+            background: rgba(139, 92, 246, 0.06);
             border-left: 3px solid var(--accent-color);
-            padding: 15px 20px; margin: 20px 0; border-radius: 0 12px 12px 0;
+            padding: 14px 18px; margin: 18px 0; border-radius: 0 10px 10px 0;
         }
         
-        .scenario-box h4 { margin: 0 0 8px 0; color: #d8b4fe; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;}
-        .scenario-box p { margin: 0; color: #e2e8f0; font-size: 0.95rem; line-height: 1.5;}
+        .scenario-box h4 { margin: 0 0 4px 0; color: #d8b4fe; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em;}
+        .scenario-box p { margin: 0; color: #cbd5e1; font-size: 0.9rem; line-height: 1.5;}
 
         /* --- Code Block --- */
         .code-block {
             background-color: var(--code-bg);
-            border-radius: 12px; padding: 20px;
-            font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+            border-radius: 10px; padding: 18px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
             color: #e2e8f0; overflow-x: auto;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.06);
+            line-height: 1.6;
         }
 
-        .code-row { display: flex; margin-bottom: 8px; }
-        .code-key { color: #a8b1ff; font-weight: bold; width: 120px; flex-shrink: 0; }
-        .code-val { color: #d1d5db; }
-        .code-comment { color: #64748b; font-size: 0.85rem; margin-bottom: 15px; display: block;}
+        .code-row { display: flex; margin-bottom: 4px; }
+        .code-key { color: #a8b1ff; font-weight: 600; width: 110px; flex-shrink: 0; }
+        .code-val { color: #f1f5f9; word-break: break-all; }
+        .code-comment { color: #64748b; font-size: 0.8rem; display: block; margin: 6px 0; }
+        .code-step { color: #94a3b8; display: block; margin-bottom: 6px; }
+        .code-step b { color: #e2e8f0; }
 
         /* --- Action Dictionary Table --- */
+        .search-bar {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            color: #fff;
+            margin-bottom: 12px;
+            outline: none;
+        }
+        .search-bar:focus { border-color: var(--accent-color); }
+
+        .table-wrap {
+            max-height: 480px;
+            overflow-y: auto;
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+        }
+
         .action-dictionary {
-            width: 100%; border-collapse: collapse; margin-top: 15px;
-            font-size: 0.9rem; text-align: left;
+            width: 100%; border-collapse: collapse;
+            font-size: 0.85rem; text-align: left;
         }
         .action-dictionary th, .action-dictionary td {
-            padding: 12px; border-bottom: 1px solid var(--card-border);
+            padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .action-dictionary th { color: var(--text-secondary); font-weight: 600; }
+        .action-dictionary th { 
+            color: var(--text-secondary); 
+            font-weight: 600; 
+            background: rgba(17, 20, 28, 0.95);
+            position: sticky; top: 0; z-index: 2;
+        }
         .action-dictionary td code {
             font-family: 'JetBrains Mono', monospace;
-            background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px;
-            color: #a8b1ff;
+            background: rgba(255,255,255,0.06); padding: 3px 6px; border-radius: 5px;
+            color: #c4b5fd; font-size: 0.8rem;
         }
-        .warning-text { color: #f59e0b; font-size: 0.8rem; display: block; margin-top: 4px;}
+        .action-category {
+            background: rgba(255,255,255,0.02);
+            font-weight: 700;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
 
         .back-btn {
-            display: inline-block; margin-top: 20px; text-align: center;
-            color: var(--accent-color); text-decoration: none; font-weight: 600;
+            display: inline-block; margin: 10px auto 0; text-align: center;
+            color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500;
+            transition: color 0.2s;
         }
-        .back-btn:hover { text-decoration: underline; }
+        .back-btn:hover { color: #fff; }
 
         @media (max-width: 600px) {
-            .api-card { padding: 20px; }
-            .code-block { font-size: 0.8rem; }
-            .action-dictionary { font-size: 0.8rem; }
-            .action-dictionary td code { font-size: 0.75rem; }
+            .api-card { padding: 18px; }
+            .code-block { font-size: 0.8rem; padding: 14px; }
+            .code-row { flex-direction: column; margin-bottom: 8px; }
+            .code-key { width: 100%; margin-bottom: 2px; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Tasker Integration</h1>
-        <p class="subtitle">A simple guide to connecting Notch-Touch with Tasker.</p>
+        <span class="badge">API Reference v2.0</span>
+        <h1>Automation Integration</h1>
+        <p class="subtitle">Connect Notch Touch with Tasker, MacroDroid, or any Android automation engine via broadcast intents.</p>
     </header>
 
     <div class="container">
         
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab('trigger')">Trigger Tasker</button>
-            <button class="tab-btn" onclick="switchTab('killswitch')">The Kill-Switch</button>
-            <button class="tab-btn" onclick="switchTab('remap')">Dynamic Remap</button>
+            <button class="tab-btn active" data-tab="trigger">Outgoing (Notch &rarr; App)</button>
+            <button class="tab-btn" data-tab="remap">Remap Actions</button>
+            <button class="tab-btn" data-tab="killswitch">State Control</button>
         </div>
 
+        <!-- TAB 1: TRIGGER AUTOMATION (OUTGOING) -->
         <div id="trigger" class="tab-content active">
             <div class="api-card">
-                <h2>From Notch-Touch to Tasker</h2>
-                <p class="desc">Trigger a complex Tasker sequence simply by tapping your camera cutout.</p>
+                <h2>Trigger Automation Tasks</h2>
+                <p class="desc">Execute routines in Tasker or MacroDroid instantly whenever a notch gesture is performed.</p>
                 
                 <div class="scenario-box">
-                    <h4>Scenario: The Smart Home Macro</h4>
-                    <p>You want to tap your notch when leaving the house to trigger a "Lockdown" routine that turns off all your smart lights, locks the front door, and sets your phone to vibrate.</p>
+                    <h4>Scenario: Smart Home Lockdown</h4>
+                    <p>Double-tap your camera cutout to run an automation task that turns off your smart desk lights, silences ringer volume, and locks your device.</p>
                 </div>
 
-                <div class="guide-header">🛠️ How to Configure</div>
-                <div class="code-block">
-                    <span class="code-comment">1. In Tasker: Preferences > Misc > Enable 'Allow External Access'</span>
-                    <span class="code-comment">2. In Tasker: Create a named Task (e.g., 'HouseLockdown')</span>
-                    <span class="code-comment">3. In Notch-Touch: Select '❖ RUN TASKER' on a gesture and enter the exact Task Name.</span>
+                <div class="guide-header">
+                    <span>Configuration Guide</span>
+                    <div class="sub-nav">
+                        <button class="sub-btn active" data-sub="trigger-tasker">Tasker</button>
+                        <button class="sub-btn" data-sub="trigger-macrodroid">MacroDroid</button>
+                    </div>
                 </div>
+
+                <!-- Subtab: Tasker -->
+                <div id="trigger-tasker" class="sub-content active">
+                    <div class="code-block">
+                        <span class="code-step"><b>1.</b> In Tasker: Navigate to <b>Preferences &gt; Misc</b> and enable <b>Allow External Access</b>.</span>
+                        <span class="code-step"><b>2.</b> Create your desired Task and give it an exact name (e.g., <code>BedtimeRoutine</code>).</span>
+                        <span class="code-step"><b>3.</b> In Notch Touch: Assign a gesture to <b>❖ RUN TASKER</b> and enter the exact Task name (<code>BedtimeRoutine</code>).</span>
+                    </div>
+                </div>
+
+                <!-- Subtab: MacroDroid -->
+                <div id="trigger-macrodroid" class="sub-content">
+                    <div class="code-block">
+                        <span class="code-step"><b>1.</b> In MacroDroid: Add a Macro and select <b>Triggers &gt; Connectivity &gt; Intent Received</b>.</span>
+                        <span class="code-step"><b>2.</b> Configure the Intent trigger as follows:</span>
+                        <div class="code-row"><span class="code-key">Action:</span><span class="code-val">net.dinglisch.android.tasker.ACTION_TASK</span></div>
+                        <div class="code-row"><span class="code-key">Extra 1 Name:</span><span class="code-val">task_name</span></div>
+                        <div class="code-row"><span class="code-key">Extra 1 Value:</span><span class="code-val">BedtimeRoutine</span></div>
+                        <span class="code-step" style="margin-top: 8px;"><b>3.</b> In Notch Touch: Set the gesture action to <b>❖ RUN TASKER</b> and enter <code>BedtimeRoutine</code>.</span>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <div id="killswitch" class="tab-content">
+        <!-- TAB 2: REMAP GESTURES (INCOMING) -->
+        <div id="remap" class="tab-content">
             <div class="api-card">
-                <h2>Tasker to Notch-Touch (Kill-Switch)</h2>
-                <p class="desc">Dynamically disable or enable specific notch gestures in the background.</p>
+                <h2>Dynamic Gesture Remapping</h2>
+                <p class="desc">Reprogram assigned notch actions dynamically based on time, battery, Wi-Fi status, or foreground app.</p>
                 
                 <div class="scenario-box">
-                    <h4>Scenario: Reading & Scrolling Mode</h4>
-                    <p>You are reading a book on the Kindle app or scrolling through Instagram, and you don't want an accidental tap on the notch to interrupt you. Tasker can automatically send a 'disable' intent when those specific apps launch, and re-enable them when you leave the app.</p>
+                    <h4>Scenario: Night Mode Remapping</h4>
+                    <p>Switch your Double-Tap action from <b>Camera</b> during the day to <b>Flashlight</b> automatically at 9:00 PM.</p>
                 </div>
 
-                <div class="guide-header">🛠️ How to Configure</div>
+                <div class="guide-header">
+                    <span>Broadcast Intent Specification</span>
+                    <div class="sub-nav">
+                        <button class="sub-btn active" data-sub="remap-tasker">Tasker</button>
+                        <button class="sub-btn" data-sub="remap-macrodroid">MacroDroid</button>
+                    </div>
+                </div>
+
+                <!-- Tasker Remap -->
+                <div id="remap-tasker" class="sub-content active">
+                    <div class="code-block">
+                        <span class="code-comment">// Add Action &gt; System &gt; Send Intent</span>
+                        <div class="code-row"><span class="code-key">Action:</span><span class="code-val">com.chaos.notchtouch.SET_GESTURE_ACTION</span></div>
+                        <div class="code-row"><span class="code-key">Extra 1:</span><span class="code-val">gesture_key:double</span></div>
+                        <div class="code-row"><span class="code-key">Extra 2:</span><span class="code-val">action_name:ACTION_TOGGLE_FLASHLIGHT</span></div>
+                        <div class="code-row"><span class="code-key">Target:</span><span class="code-val">Broadcast Receiver</span></div>
+                    </div>
+                </div>
+
+                <!-- MacroDroid Remap -->
+                <div id="remap-macrodroid" class="sub-content">
+                    <div class="code-block">
+                        <span class="code-comment">// Add Action &gt; Connectivity &gt; Send Intent</span>
+                        <div class="code-row"><span class="code-key">Target:</span><span class="code-val">Broadcast Receiver</span></div>
+                        <div class="code-row"><span class="code-key">Action:</span><span class="code-val">com.chaos.notchtouch.SET_GESTURE_ACTION</span></div>
+                        <div class="code-row"><span class="code-key">Extra 1:</span><span class="code-val">Name: gesture_key | Value: double (String)</span></div>
+                        <div class="code-row"><span class="code-key">Extra 2:</span><span class="code-val">Name: action_name | Value: ACTION_TOGGLE_FLASHLIGHT (String)</span></div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 14px;">
+                    <span class="code-comment"><b>Valid <code>gesture_key</code> values:</b> <code>single</code>, <code>double</code>, <code>triple</code>, <code>hold</code>, <code>left</code>, <code>right</code>, <code>left_hold</code>, <code>right_hold</code></span>
+                </div>
+
+                <div class="guide-header" style="margin-top: 28px;">
+                    <span>Action String Reference</span>
+                </div>
+
+                <input type="text" id="actionSearch" class="search-bar" placeholder="Filter actions (e.g. flashlight, volume, ai, note)...">
+
+                <div class="table-wrap">
+                    <table class="action-dictionary" id="actionTable">
+                        <thead>
+                            <tr>
+                                <th>Action String (action_name)</th>
+                                <th>Function</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="action-category"><td colspan="2">Notch Hub &amp; Tools</td></tr>
+                            <tr><td><code>ACTION_NONE</code></td><td>Clears the gesture</td></tr>
+                            <tr><td><code>ACTION_OPEN_NOTCH_MENU</code></td><td>Opens the Notch menu</td></tr>
+                            <tr><td><code>ACTION_OPEN_WIDGETS</code></td><td>Opens the Widget Hub</td></tr>
+                            <tr><td><code>ACTION_OPEN_AI</code></td><td>Opens Notch AI prompt</td></tr>
+                            <tr><td><code>ACTION_OPEN_NOTES</code></td><td>Opens Notch Notes editor</td></tr>
+                            <tr><td><code>ACTION_PIN_NOTE</code></td><td>Pins current note to screen</td></tr>
+                            <tr><td><code>ACTION_OPEN_MIRROR</code></td><td>Opens front-camera pocket mirror</td></tr>
+                            <tr><td><code>ACTION_OPEN_QR_SCANNER</code></td><td>Opens instant QR code scanner</td></tr>
+                            <tr><td><code>ACTION_OPEN_CALCULATOR</code></td><td>Launches system calculator</td></tr>
+                            <tr><td><code>ACTION_SAMSUNG_AI</code></td><td>Triggers Samsung Galaxy AI assistant</td></tr>
+
+                            <tr class="action-category"><td colspan="2">System &amp; Controls</td></tr>
+                            <tr><td><code>ACTION_TOGGLE_FLASHLIGHT</code></td><td>Toggles the LED flashlight</td></tr>
+                            <tr><td><code>ACTION_TAKE_SCREENSHOT</code></td><td>Captures screen</td></tr>
+                            <tr><td><code>ACTION_LOCK_SCREEN</code></td><td>Locks screen immediately</td></tr>
+                            <tr><td><code>ACTION_POWER_MENU</code></td><td>Opens device power/reboot menu</td></tr>
+                            <tr><td><code>ACTION_LAUNCH_ASSISTANT</code></td><td>Launches default voice assistant</td></tr>
+                            <tr><td><code>ACTION_TOGGLE_RINGER</code></td><td>Cycles normal, vibrate, silent modes</td></tr>
+                            <tr><td><code>ACTION_BRIGHTNESS_UP</code></td><td>Increases display brightness</td></tr>
+                            <tr><td><code>ACTION_BRIGHTNESS_DOWN</code></td><td>Decreases display brightness</td></tr>
+                            <tr><td><code>ACTION_OPEN_NOTIFICATIONS</code></td><td>Expands notification shade</td></tr>
+
+                            <tr class="action-category"><td colspan="2">Media &amp; Volume</td></tr>
+                            <tr><td><code>ACTION_PLAY_PAUSE</code></td><td>Toggles active media playback</td></tr>
+                            <tr><td><code>ACTION_NEXT_TRACK</code></td><td>Skips to next audio track</td></tr>
+                            <tr><td><code>ACTION_PREV_TRACK</code></td><td>Restarts or returns to previous track</td></tr>
+                            <tr><td><code>ACTION_VOLUME_UP</code></td><td>Increases media volume</td></tr>
+                            <tr><td><code>ACTION_VOLUME_DOWN</code></td><td>Decreases media volume</td></tr>
+
+                            <tr class="action-category"><td colspan="2">Navigation &amp; Launching</td></tr>
+                            <tr><td><code>ACTION_BACK</code></td><td>Performs global Back press</td></tr>
+                            <tr><td><code>ACTION_HOME</code></td><td>Navigates to Home screen</td></tr>
+                            <tr><td><code>ACTION_RECENTS</code></td><td>Opens Recent Apps switcher</td></tr>
+                            <tr><td><code>ACTION_LAST_APP</code></td><td>Quick-switches to previously used app</td></tr>
+                            <tr><td><code>ACTION_OPEN_APP</code></td><td>Launches configured app</td></tr>
+                            <tr><td><code>ACTION_OPEN_CAMERA</code></td><td>Launches default camera</td></tr>
+                            <tr><td><code>ACTION_QUICK_DIAL</code></td><td>Dials configured speed-dial contact</td></tr>
+                            <tr><td><code>ACTION_RUN_TASKER</code></td><td>Fires custom automation broadcast</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 3: KILL-SWITCH / STATE CONTROL -->
+        <div id="killswitch" class="tab-content">
+            <div class="api-card">
+                <h2>Gesture State Control (Killswitch)</h2>
+                <p class="desc">Selectively pause or resume individual gestures during specific contexts without stopping the background service.</p>
+                
+                <div class="scenario-box">
+                    <h4>Scenario: E-Reader / Fullscreen Gaming</h4>
+                    <p>Disable single-tap and hold gestures automatically whenever Kindle or a game runs in the foreground to eliminate accidental touches.</p>
+                </div>
+
+                <div class="guide-header">
+                    <span>Broadcast Intent Specification</span>
+                </div>
+
                 <div class="code-block">
-                    <span class="code-comment">In Tasker, create a 'Send Intent' Action:</span>
+                    <span class="code-comment">// Send Intent via Tasker or MacroDroid</span>
                     <div class="code-row"><span class="code-key">Action:</span><span class="code-val">com.chaos.notchtouch.SET_GESTURE_STATE</span></div>
                     <div class="code-row"><span class="code-key">Extra 1:</span><span class="code-val">gesture_key:single</span></div>
                     <div class="code-row"><span class="code-key">Extra 2:</span><span class="code-val">is_disabled:true</span></div>
                     <div class="code-row"><span class="code-key">Target:</span><span class="code-val">Broadcast Receiver</span></div>
-                    <br>
-                    <span class="code-comment">Gesture Keys: single, double, triple, left, right, left_hold, right_hold, hold</span>
-                    <span class="code-comment">is_disabled: Use 'true' to block the touch, 'false' to re-enable.</span>
+                </div>
+
+                <div style="margin-top: 14px;">
+                    <span class="code-comment">Set <code>is_disabled</code> to <code>true</code> (boolean or string) to block touches, or <code>false</code> to restore standard operation.</span>
                 </div>
             </div>
         </div>
 
-        <div id="remap" class="tab-content">
-            <div class="api-card">
-                <h2>Tasker to Notch-Touch (Remapping)</h2>
-                <p class="desc">Instantly overwrite a gesture's assigned action without ever opening the Notch-Touch app.</p>
-                
-                <div class="scenario-box">
-                    <h4>Scenario: Time-Based Context</h4>
-                    <p>You want your "Double Tap" gesture to open the Camera app during the day, but you want it to toggle the Flashlight after 8:00 PM. Tasker can send an intent at 8:00 PM to seamlessly reprogram the gesture's memory.</p>
-                </div>
-
-                <div class="guide-header">🛠️ How to Configure</div>
-                <div class="code-block">
-                    <span class="code-comment">In Tasker, create a 'Send Intent' Action:</span>
-                    <div class="code-row"><span class="code-key">Action:</span><span class="code-val">com.chaos.notchtouch.SET_GESTURE_ACTION</span></div>
-                    <div class="code-row"><span class="code-key">Extra 1:</span><span class="code-val">gesture_key:double</span></div>
-                    <div class="code-row"><span class="code-key">Extra 2:</span><span class="code-val">action_name:ACTION_TOGGLE_FLASHLIGHT</span></div>
-                    <div class="code-row"><span class="code-key">Target:</span><span class="code-val">Broadcast Receiver</span></div>
-                </div>
-
-                <div class="guide-header">📋 Action Reference Dictionary</div>
-                <p class="desc" style="font-size: 0.9rem; margin-top: 0;">Use these exact strings for the <code>action_name</code> Extra.</p>
-                
-                <div style="overflow-x: auto;">
-                    <table class="action-dictionary">
-                        <thead>
-                            <tr>
-                                <th>Action String (action_name)</th>
-                                <th>What it does</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td><code>ACTION_NONE</code></td><td>Does nothing (Clears the gesture)</td></tr>
-                            <tr><td><code>ACTION_OPEN_APP</code></td><td>Opens a specific App <span class="warning-text">*Must be pre-configured in Notch-Touch</span></td></tr>
-                            <tr><td><code>ACTION_RUN_TASKER</code></td><td>Runs a Tasker Sequence <span class="warning-text">*Must be pre-configured in Notch-Touch</span></td></tr>
-                            <tr><td><code>ACTION_OPEN_CAMERA</code></td><td>Opens the Camera</td></tr>
-                            <tr><td><code>ACTION_SCREENSHOT</code></td><td>Takes a screenshot</td></tr>
-                            <tr><td><code>ACTION_OPEN_NOTCH_MENU</code></td><td>Opens the Notch Menu</td></tr>
-                            <tr><td><code>ACTION_OPEN_WIDGETS</code></td><td>Opens the Widget Hub</td></tr>
-                            <tr><td><code>ACTION_BACK</code></td><td>Simulates the Back button</td></tr>
-                            <tr><td><code>ACTION_HOME</code></td><td>Simulates the Home button</td></tr>
-                            <tr><td><code>ACTION_RECENTS</code></td><td>Opens Recent Apps</td></tr>
-                            <tr><td><code>ACTION_NEXT_TRACK</code></td><td>Skips to the next song</td></tr>
-                            <tr><td><code>ACTION_PREVIOUS_TRACK</code></td><td>Returns to the previous song</td></tr>
-                            <tr><td><code>ACTION_PLAY_PAUSE</code></td><td>Toggles media Play/Pause</td></tr>
-                            <tr><td><code>ACTION_VOLUME_UP</code></td><td>Increases volume</td></tr>
-                            <tr><td><code>ACTION_VOLUME_DOWN</code></td><td>Decreases volume</td></tr>
-                            <tr><td><code>ACTION_BRIGHTNESS_UP</code></td><td>Increases screen brightness</td></tr>
-                            <tr><td><code>ACTION_BRIGHTNESS_DOWN</code></td><td>Decreases screen brightness</td></tr>
-                            <tr><td><code>ACTION_TOGGLE_FLASHLIGHT</code></td><td>Toggles the flashlight</td></tr>
-                            <tr><td><code>ACTION_LOCK_SCREEN</code></td><td>Locks the phone screen</td></tr>
-                            <tr><td><code>ACTION_LAUNCH_ASSISTANT</code></td><td>Launches the digital assistant</td></tr>
-                            <tr><td><code>ACTION_TOGGLE_RINGER</code></td><td>Toggles Silent/Ringer mode</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <a href="index.html" class="back-btn">← Back to Chæos Studios</a>
+        <a href="index.html" class="back-btn">&larr; Back to Ch&aelig;os Studios</a>
     </div>
 
     <script>
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            event.currentTarget.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-        }
+        // Main Tab Switcher
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Sub-Tab Switcher (Tasker vs MacroDroid)
+        document.querySelectorAll('.sub-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const parentHeader = btn.closest('.guide-header') || btn.parentElement;
+                const container = parentHeader.parentElement;
+                
+                parentHeader.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const targetId = btn.dataset.sub;
+                container.querySelectorAll('.sub-content').forEach(content => {
+                    content.classList.toggle('active', content.id === targetId);
+                });
+            });
+        });
+
+        // Action Dictionary Search Filter
+        const searchInput = document.getElementById('actionSearch');
+        const tableRows = document.querySelectorAll('#actionTable tbody tr');
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            tableRows.forEach(row => {
+                if (row.classList.contains('action-category')) {
+                    row.style.display = query ? 'none' : '';
+                    return;
+                }
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
     </script>
 </body>
 </html>
